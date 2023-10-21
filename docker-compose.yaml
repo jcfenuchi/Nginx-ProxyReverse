@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  web01:
+    image: jcfenuchi/red-webpage
+    networks:
+      - web_network
+  web02:
+    image: jcfenuchi/blue-webpage
+    networks:
+      - web_network
+  web03:
+    image: jcfenuchi/yellow-webpage
+    networks:
+      - web_network
+  proxy:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - web_network
+    depends_on:
+      - web01
+      - web02
+      - web03
+
+networks:
+  web_network:
+    driver: bridge
